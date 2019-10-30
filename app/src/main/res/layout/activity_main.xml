@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/_PTGButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="150dp"
+        android:layout_centerInParent="true"
+        android:onClick="startGame"
+        android:text="@string/PTGButton"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/_AboutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="250dp"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-medium"
+        android:onClick="itsAboutMe"
+        android:text="@string/About_the_game"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="368dp"
+        android:layout_height="302dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="20dp"
+        android:background="#00FFFFFF"
+        android:contentDescription="@string/HangMan_picture"
+        android:src="@drawable/gallow0"
+
+        />
+
+</RelativeLayout>

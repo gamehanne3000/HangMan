@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayTheGame"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/_Hang_sequence"
+        android:layout_width="match_parent"
+        android:layout_height="500sp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="200dp"
+        android:background="#DCE5EF"
+        android:contentDescription="@string/HangMan_picture" />
+
+    <TextView
+        android:id="@+id/_txtLetterTried"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/_TriesLeft"
+        android:layout_marginBottom="-40dp"
+        android:background="#5188C2"
+        android:inputType="text"
+        android:text="@string/letters_tried"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/_TriesLeft"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/_txtWordToBeGuessed"
+        android:layout_marginTop="50dp"
+        android:background="#DCE5EF"
+        android:text="@string/Tries_Left"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/_txtWordToBeGuessed"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/_Hang_sequence"
+        android:layout_alignParentLeft="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-3dp"
+        android:background="#5188C2"
+        android:text=" My word "
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/_editInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="10dp"
+        android:hint="@string/GuessBar"
+        android:inputType="textPersonName"
+        android:maxLength="1"
+        android:text="@string/my_word"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textColorHint="#000000" />
+</RelativeLayout>

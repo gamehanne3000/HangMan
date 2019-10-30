@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">HangMan</string>
+    <string name="title_activity_play_the_game">PlayTheGame</string>
+    <string name="PTGButton">Play Hang man</string>
+    <string name="About_the_game">About the game</string>
+    <string name="Hang_man">Hang Man</string>
+    <string name="HangMan_picture">HangMan_pictures</string>
+    <string name="About_me">Hej gott folk denna app är skapad av Johannes Ryberg</string>
+    <string name="Tries_Left">10 tries left</string>
+    <string name="letters_tried">letter tried</string>
+    <string name="Test_button"> Gissa </string>
+    <string name="background"> Background </string>
+    <string name="GuessBar"> Input one letter </string>
+    <string name="go_back">Reset</string>
+    <string name="my_word">My Word</string>
+    <string name="won">You won</string>
+    <string name="loss">You loss</string>
+    <string name="go_back_to_main_menu">Go back to Main menu</string>
+</resources>
