@@ -11,16 +11,9 @@ public class Variable {
     String wordToBeGuessed; // ligger i bakgrunden
     String wordDisplayedString; // vad som visas på skärmen
     String letterTried;
-    String setletterTried;
-    String setHiddenWord;
-    String triesLeftString;
-    String prefHiddenWord;
-    String prefLetterTried;
-    String currentPictureString;
     char[] wordDisplayCharArray; // för att underlätta att ändra bokstäverna till '-'
     ArrayList<String> myListOfWords;
     final String MESSAGE_WITH_LETTERS_TRIED = "Letters tried: ";
-    final String MESSAGE_WITH_TRIES_LEFT = (" tries left");
     final String RESULT_MESSAGE_WON = "You won the game";
     final String RESULT_MESSAGE_LOSS = "You loss the game";
     final String RIGHT_WORD = "The right word was: ";
