@@ -18,6 +18,8 @@ public class Variable {
     String triesLeftToString;
     String messageToDisplayTriesLeft = (triesLeftToString + MESSAGE_WITH_TRIES_LEFT);
 
+    // hej
+
     char[] wordDisplayCharArray; // för att underlätta att ändra bokstäverna till '-'
     ArrayList<String> myListOfWords;
 
