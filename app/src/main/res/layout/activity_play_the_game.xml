@@ -74,26 +74,11 @@
         android:textColorHint="#000000" />
 
     <Button
-        android:id="@+id/_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="save" />
-
-    <Button
         android:id="@+id/_loadAndUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="100dp"
+        android:layout_marginLeft="-4dp"
         android:text="load and update" />
 
-    <EditText
-        android:id="@+id/_testText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name" />
 </RelativeLayout>

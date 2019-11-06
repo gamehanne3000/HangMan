@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,90 +22,73 @@ import java.util.Scanner;
 
 public class PlayTheGame extends AppCompatActivity {
 
-    private Variable varible;
+    private Variable variable;
     ImageView ivHangmanSequence;
     TextView txtwordToBeGuessed;
     EditText editInput;
     TextView txtLetterTried;
     TextView txtTriesLeft;
+    Button btnloadAndUpdateTest; // knappen har skapats för att visa att sharedpreference fungerar
 
-    final String MESSAGE_WITH_TRIES_LEFT = (" tries left");
     public static final String SHARED_PREF = "SHARED_PREF";
-    public static final String TRIES_LEFT = "TRIES_LEFT";
+    public static final String SAVE_TRIES_LEFT = "SAVE_TRIES_LEFT";
     public static final String WORD_TO_BE_GUESSED = "WORD_TO_BE_GUESSED";
     public static final String LETTERS_TRIED = "LETTERS_TRIED";
     public static final String PICTURE_INDEX = "PICTURE_INDEX";
 
-    String DisplayCurrentWord;
-    String getLettersTried;
-    String triesLeftToString;
-    String messageToDisplayTriesLeft = (triesLeftToString + MESSAGE_WITH_TRIES_LEFT);
-    int currentPicture;
+    void init() {
+        Collections.shuffle(variable.myListOfWords); // Slumpgenerera ett ord i från txt filen
+        variable.wordToBeGuessed = variable.myListOfWords.get(0); // hämta ordet
+        variable.myListOfWords.remove(0); // ta bort det så att det inte dycker upp igen
 
-    // test
-    Button btnsaveTest;
-    Button btnloadAndUpdateTest;
-    TextView txtTest;
-
-
-    void reset() {
-        // Slumpgenerera ett ord i array list och få tag på första elementet, ta sedan ta bort det så att det inte dycker upp igen.
-        Collections.shuffle(varible.myListOfWords);
-        varible.wordToBeGuessed = varible.myListOfWords.get(0);
-        varible.myListOfWords.remove(0);
-
-        // 1. initiera bilden
+        // Initiera startbilden
         ivHangmanSequence = findViewById(R.id._Hang_sequence);
         ivHangmanSequence.setImageResource(R.drawable.gallow0);
-        varible.pictureCounter = 1;
+        variable.pictureCounter = 1;
 
 
-        // 2. initiera char array för att enklare tilldela varje bokstav '-'
-        varible.wordDisplayCharArray = varible.wordToBeGuessed.toCharArray();
-        for (int i = 0; i < varible.wordDisplayCharArray.length; i++) {
-            varible.wordDisplayCharArray[i] = '-';
+        // Initiera char array för att enklare tilldela varje bokstav '-'
+        variable.wordDisplayCharArray = variable.wordToBeGuessed.toCharArray();
+        for (int i = 0; i < variable.wordDisplayCharArray.length; i++) {
+            variable.wordDisplayCharArray[i] = '-';
         }
 
         // omvandla "wordDisplayCharArray" till string och visa ordet då metoden (tar emot String)
-        varible.wordDisplayedString = String.valueOf(varible.wordDisplayCharArray);
+        variable.wordDisplayedString = String.valueOf(variable.wordDisplayCharArray);
         displayWordOnScreen();
 
-        // 3. Töm eventuell bokstav
+        // Töm eventuell bokstav
         editInput.setText("");
 
-        // 3. Bokstäver som har använts
-        // initiera en string för de för dem bokstäver som har testats med ett SPACE
+        // Bokstäver som har använts:
+        // initiera en string för de bokstäver som har testats med ett SPACE
         // när jag vill söka efter input letter .. och se ifall det ligger innaför "letterTried"
         // vid indexOf() metoden så söker programmet inte efter en tom sträng
-        varible.letterTried = " ";
+        variable.letterTried = " ";
+        txtLetterTried.setText(variable.MESSAGE_WITH_LETTERS_TRIED);
 
-        // display on screen
-        txtLetterTried.setText(varible.MESSAGE_WITH_LETTERS_TRIED);
-
-        // 4. Försök kvar
         // initiera strängen för "txtTriesLeft"
-        varible.triesLeft = 10;
-        String messageToDisplayTriesLeft = (varible.triesLeft + MESSAGE_WITH_TRIES_LEFT);
+        variable.triesLeft = 10;
+        String messageToDisplayTriesLeft = (variable.triesLeft + variable.MESSAGE_WITH_TRIES_LEFT);
         txtTriesLeft.setText(messageToDisplayTriesLeft);
 
     }
 
     void revealLetterInWord(char letter) {
 
-        int indexOfLetter = varible.wordToBeGuessed.indexOf(letter); // nummer som representerar index av bokstaven
-
-        //tar index och och hämtar från string med samma ord + kolla om det finns fler än en av samma bokstav
+        // Tar index och och hämtar från string och kollar om det finns fler än en av samma bokstav
+        int indexOfLetter = variable.wordToBeGuessed.indexOf(letter); // nummer som representerar index av bokstaven
         while (indexOfLetter >= 0) {
-            varible.wordDisplayCharArray[indexOfLetter] = varible.wordToBeGuessed.charAt(indexOfLetter);
-            indexOfLetter = varible.wordToBeGuessed.indexOf(letter, indexOfLetter + 1);
+            variable.wordDisplayCharArray[indexOfLetter] = variable.wordToBeGuessed.charAt(indexOfLetter);
+            indexOfLetter = variable.wordToBeGuessed.indexOf(letter, indexOfLetter + 1);
         }
-        // uppdatera strängen också
-        varible.wordDisplayedString = String.valueOf(varible.wordDisplayCharArray);
+        // Uppdatera strängen också
+        variable.wordDisplayedString = String.valueOf(variable.wordDisplayCharArray);
     }
 
     void displayWordOnScreen() {
         String formattedString = "";
-        for (char character : varible.wordDisplayCharArray) {
+        for (char character : variable.wordDisplayCharArray) {
             formattedString += character + " ";
         }
         txtwordToBeGuessed.setText(formattedString);
@@ -118,85 +100,77 @@ public class PlayTheGame extends AppCompatActivity {
         setContentView(R.layout.activity_play_the_game);
 
             // Initiera variablerna
-            varible = Variable.getInstance();
-            varible.myListOfWords = new ArrayList<>();
+            variable = Variable.getInstance();
+            variable.myListOfWords = new ArrayList<>();
             txtwordToBeGuessed = findViewById(R.id._txtWordToBeGuessed); // finns redan i metoden wordGenrator
             editInput = findViewById(R.id._editInput);
             txtLetterTried = findViewById(R.id._txtLetterTried);
             txtTriesLeft = findViewById(R.id._TriesLeft);
-
-            // test
-            btnsaveTest = findViewById(R.id._save);
             btnloadAndUpdateTest = findViewById(R.id._loadAndUpdate);
-            txtTest = findViewById(R.id._testText);
 
-            // sammanlinka med databasen och populera array med det givna orden i "database_file.txt"
+            // Sammanlinka med databasen och populera array med det givna orden i "database_file.txt"
             InputStream myInputStream = null;
             Scanner input = null;
             String aWord;
 
-            // om filen finns skicka in vad som finns i textfilen.
+            // Om filen finns ta in orden som finns i textfilen.
             try {
                 myInputStream = getAssets().open("Words_file.txt");
                 input = new Scanner(myInputStream);
 
-                // sålänge det finns ett ord så forsätt annars stoppa loop
+                // Sålänge det finns ett ord så forsätt annars stoppa loop
                 while (input.hasNext()) {
                     aWord = input.next();
-                    varible.myListOfWords.add(aWord);
+                    variable.myListOfWords.add(aWord);
                 }
+
             } catch (IOException e) {
-                // typ av felmeddelande som uppstod och skickar ut ett meddelande motsvarat feltypen
+                // Typ av felmeddelande som uppstod och skickar ut ett meddelande motsvarat feltypen
                 Toast.makeText(PlayTheGame.this, e.getClass().getSimpleName() + ": " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
             } finally {
-                // för att slippa ödslad minneshantering stänger jag ner Scanner så länge inte något att skickats in
+                // För att slippa ödslad minneshantering stänger jag ner Scanner så länge inte något att skickats in
                 if (input != null) {
                     input.close();
                 }
-                //Stäng ner "myInputStream"
+
+                // Stäng ner "myInputStream om filen har skapats"
                 try {
-                    // Om filen har skapats så vill jag kunna stänga ner den.
                     if (myInputStream != null) {
                         myInputStream.close();
                     }
+
                 } catch (IOException e) {
                     Toast.makeText(PlayTheGame.this, e.getClass().getSimpleName() + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 
+        btnloadAndUpdateTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadDataAnsUpdate();
+            }
+        });
 
-            btnsaveTest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    saveData();
-                }
-            });
+        editInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-              btnloadAndUpdateTest.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     loadDataAnsUpdate();
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // kollar om en bokstav har skrivits in i ( PlainText "editInput")
+                if (s.length() != 0) {
+                    checkIfLetterInWord(s.charAt(0));
                 }
-            });
+            }
 
-            editInput.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // kollar om en bokstav har skrivits in i ( PlainText "editInput")
-                    if (s.length() != 0) {
-                        checkIfLetterInWord(s.charAt(0));
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-            });
-            reset();
+        init();
     }
 
     void checkIfLetterInWord(char letter) {
@@ -205,14 +179,12 @@ public class PlayTheGame extends AppCompatActivity {
         // return;
 
         // Om bokstaven hittades i ordet som gissas
-        if (varible.wordToBeGuessed.indexOf(letter) >= 0) {
+        if (variable.wordToBeGuessed.indexOf(letter) >= 0) {
 
-            // Om bokstaven inte finns i ordet (0 = utanför string)
-            if (varible.wordDisplayedString.indexOf(letter) < 0) {
+            // Uppdatera om bokstaven inte finns i ordet (0 = utanför string)
+            if (variable.wordDisplayedString.indexOf(letter) < 0) {
                 // byt ut '-' med rätt gissad bokstav
                 revealLetterInWord(letter);
-
-                // Uppdatera ändringarna på skärmen
                 displayWordOnScreen();
 
                 winOrLoss();
@@ -223,53 +195,54 @@ public class PlayTheGame extends AppCompatActivity {
             decreaseAndDisplayTriesLeft();
             winOrLoss();
         }
-        // Om bokeatven finns i "wordToBeGuessed, print out"
-        if (varible.letterTried.indexOf(letter) < 0) {
-            varible.letterTried += letter + ", ";
-            /* Kod missas -> sänk inte på antalet försök men vet ej hur jag gör*/
-            String messageToBeDisplayed = (varible.MESSAGE_WITH_LETTERS_TRIED + varible.letterTried);
+        // skriv ut de gissade bokstäverna
+        if (variable.letterTried.indexOf(letter) < 0) {
+            variable.letterTried += letter + ", ";
+            String messageToBeDisplayed = (variable.MESSAGE_WITH_LETTERS_TRIED + variable.letterTried);
             txtLetterTried.setText(messageToBeDisplayed);
         }
     }
 
     /*
      *   Knappen "gissa" lyder med följande kod:
-     *   - ny bild visas vid varje felgissad bokstav    -> kan ej uppdatera bilderna efter att ett spel är färdig
-     *   - antalet försök registreas också här          -> antal försök kvar minskar även
+     *      - Ny bild visas vid varje felgissad bokstav
+     *      - Antalet försök registreas också här
      */
     public void decreaseAndDisplayTriesLeft() {
-        if (varible.triesLeft >= 0) {
-            // int pictureId = får värdet av bildens nummer i mappen drawable som ligger i package (drawable) (index på bilder)
-            int pictureId = getResources().getIdentifier("gallow" + varible.pictureCounter, "drawable", getPackageName());
+        if (variable.triesLeft >= 0) {
+            // int pictureId = får värdet av bildens nummer i mappen drawable som ligger i package (drawable) och därmed (index på bilder)
+            int pictureId = getResources().getIdentifier("gallow" + variable.pictureCounter, "drawable", getPackageName());
             ivHangmanSequence.setImageResource(pictureId); // skriver ut respektive bild beroende på bildnummer
-            varible.pictureCounter++;
+            variable.pictureCounter++;
 
-            // antal försök kvar
-            varible.triesLeft--;
-            String messageToDisplayTriesLeft = (varible.triesLeft + " Tries left");
+            // Antal försök kvar
+            variable.triesLeft--;
+            String messageToDisplayTriesLeft = (variable.triesLeft + " Tries left");
             txtTriesLeft.setText(messageToDisplayTriesLeft);
         }
     }
 
     public void winOrLoss() {
-        // kollar om man har förlorat
-        if (varible.triesLeft <= 0) {
+        // Kollar om man har förlorat
+        if (variable.triesLeft <= 0) {
             ivHangmanSequence.setImageResource(R.drawable.gallow0);
+
             // initiera överföring av data för både antalet försök och det rätta ordet till aktiviten "resultat"
-            String youLoseToResultActivity = varible.RESULT_MESSAGE_LOSS;
-            String triesLeftToResultActivity = varible.triesLeft + " " + MESSAGE_WITH_TRIES_LEFT;
-            String rightWordToResultActivity = varible.RIGHT_WORD + varible.wordToBeGuessed;
+            String youLoseToResultActivity = variable.RESULT_MESSAGE_LOSS;
+            String triesLeftToResultActivity = variable.triesLeft + " " + variable.MESSAGE_WITH_TRIES_LEFT;
+            String rightWordToResultActivity = variable.RIGHT_WORD + variable.wordToBeGuessed;
             Intent intent = new Intent(this, Result.class);
             intent.putExtra("loss", youLoseToResultActivity);
             intent.putExtra("triesLeft", triesLeftToResultActivity);
             intent.putExtra("rightWord", rightWordToResultActivity);
             startActivity(intent);
         } else {
-            // kollar om man har vunnit (! = om det inte finns några '-' kvar i "wordToBeGuessed")
-            if (!varible.wordDisplayedString.contains("-")) {
-                String youWonToResultActivity = varible.RESULT_MESSAGE_WON;
-                String triesLeftToResultActivity = varible.triesLeft + " " + MESSAGE_WITH_TRIES_LEFT;
-                String rightWordToResultActivity = varible.RIGHT_WORD + varible.wordToBeGuessed;
+
+            // Kollar om man har vunnit (! = om det inte finns några '-' kvar i "wordToBeGuessed")
+            if (!variable.wordDisplayedString.contains("-")) {
+                String youWonToResultActivity = variable.RESULT_MESSAGE_WON;
+                String triesLeftToResultActivity = variable.triesLeft + " " + variable.MESSAGE_WITH_TRIES_LEFT;
+                String rightWordToResultActivity = variable.RIGHT_WORD + variable.wordToBeGuessed;
                 Intent intent = new Intent(this, Result.class);
                 intent.putExtra("won", youWonToResultActivity);
                 intent.putExtra("triesLeft", triesLeftToResultActivity);
@@ -280,116 +253,107 @@ public class PlayTheGame extends AppCompatActivity {
     }
 
     /*
-     * Följande methoder "saveData" och "loadData" och "updateData" bygger på sharedPreferences
+     * Spara datan mha sharedPreferences
      */
     public void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // omvandlar triesLeft till String
-        messageToDisplayTriesLeft = (varible.triesLeft + MESSAGE_WITH_TRIES_LEFT);
-        //int pictureId = getResources().getIdentifier("gallow" + varible.pictureCounter, "drawable", getPackageName());
+        variable.messageToDisplayTriesLeft = (variable.triesLeft + variable.MESSAGE_WITH_TRIES_LEFT);
+        int pictureId = getResources().getIdentifier("gallow" + variable.pictureCounter, "drawable", getPackageName());
 
         // spara undan värderna
-        //editor.putInt(PICTURE_INDEX, pictureId);
+        editor.putInt(PICTURE_INDEX, pictureId);
         editor.putString(WORD_TO_BE_GUESSED, txtwordToBeGuessed.getText().toString());
-        editor.putString(TRIES_LEFT, messageToDisplayTriesLeft);
+        editor.putString(SAVE_TRIES_LEFT, variable.messageToDisplayTriesLeft);
         editor.putString(LETTERS_TRIED, txtLetterTried.getText().toString());
 
         editor.apply();
-
         Toast.makeText(PlayTheGame.this, "Data saved", Toast.LENGTH_SHORT).show();
     }
 
+    /*
+     * Hämta datan mha sharedPreferences
+     * HJÄLP = är if statement korrekt och också isåfall ska jag initiera spelet mha ("else" init)
+     */
     public void loadDataAnsUpdate() {
         SharedPreferences sharePref = getSharedPreferences(SHARED_PREF, MODE_PRIVATE);
 
-        // för datan tillbaka in
+        // ifall det finns något sparat = visa
         if (sharePref != null){
-            //currentPicture = sharePref.getInt(PICTURE_INDEX, 0);
-            DisplayCurrentWord = sharePref.getString(WORD_TO_BE_GUESSED, "");
-            triesLeftToString = sharePref.getString(TRIES_LEFT, "");
-            getLettersTried = sharePref.getString(LETTERS_TRIED, "");
+            variable.currentPicture = sharePref.getInt(PICTURE_INDEX, 0);
+            variable.DisplayCurrentWord = sharePref.getString(WORD_TO_BE_GUESSED, "");
+            variable.triesLeftToString = sharePref.getString(SAVE_TRIES_LEFT, "");
+            variable.getLettersTried = sharePref.getString(LETTERS_TRIED, "");
 
             // uppdatera elementet
-            //ivHangmanSequence.setImageResource(currentPicture);
-            txtwordToBeGuessed.setText(DisplayCurrentWord);
-            txtTriesLeft.setText(triesLeftToString);
-            txtLetterTried.setText(getLettersTried);
+            ivHangmanSequence.setImageResource(variable.currentPicture);
+            txtwordToBeGuessed.setText(variable.DisplayCurrentWord);
+            txtTriesLeft.setText(variable.triesLeftToString);
+            txtLetterTried.setText(variable.getLettersTried);
 
             Toast.makeText(PlayTheGame.this, "Data loaded and updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PlayTheGame.this, variable.currentPicture, Toast.LENGTH_LONG).show();
         } else {
-            reset();
+            init();
         }
-
-        Log.d("debugg", messageToDisplayTriesLeft);
-        Log.d("debugg", String.valueOf(currentPicture));
     }
-
 
     /*
      * extra kod som inte är nödvändigt eller klar
      * spara värden i vertikalt läge med följande "onRestoreInstanceState" och "onSaveInstanceState" fungerar halvt och designen vertikalt är inte bra
      */
-
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        // Omvandlar triesLeft till String
-        messageToDisplayTriesLeft = (varible.triesLeft + MESSAGE_WITH_TRIES_LEFT);
-        int pictureId = getResources().getIdentifier("gallow" + varible.pictureCounter, "drawable", getPackageName());
+        variable.messageToDisplayTriesLeft = (variable.triesLeft + variable.MESSAGE_WITH_TRIES_LEFT);
+        int pictureId = getResources().getIdentifier("gallow" + variable.pictureCounter, "drawable", getPackageName());
 
         // Spara undan värderna
         savedInstanceState.putInt(PICTURE_INDEX, pictureId );
         savedInstanceState.putString(WORD_TO_BE_GUESSED, txtwordToBeGuessed.getText().toString());
-        savedInstanceState.putString(TRIES_LEFT, messageToDisplayTriesLeft);
+        savedInstanceState.putString(SAVE_TRIES_LEFT, variable.messageToDisplayTriesLeft);
         savedInstanceState.putString(LETTERS_TRIED, txtLetterTried.getText().toString());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
-        currentPicture = savedInstanceState.getInt(PICTURE_INDEX, 0);
-        DisplayCurrentWord = savedInstanceState.getString(WORD_TO_BE_GUESSED);
-        triesLeftToString = savedInstanceState.getString(TRIES_LEFT);
-        getLettersTried = savedInstanceState.getString(LETTERS_TRIED);
+        // hämtar värden
+        variable.currentPicture = savedInstanceState.getInt(PICTURE_INDEX, 0);
+        variable.DisplayCurrentWord = savedInstanceState.getString(WORD_TO_BE_GUESSED);
+        variable.triesLeftToString = savedInstanceState.getString(SAVE_TRIES_LEFT);
+        variable.getLettersTried = savedInstanceState.getString(LETTERS_TRIED);
 
         // uppdatera elementet
-        ivHangmanSequence.setImageResource(currentPicture);
-        txtwordToBeGuessed.setText(DisplayCurrentWord);
-        txtTriesLeft.setText(triesLeftToString);
-        txtLetterTried.setText(getLettersTried);
+        ivHangmanSequence.setImageResource(variable.currentPicture);
+        txtwordToBeGuessed.setText(variable.DisplayCurrentWord);
+        txtTriesLeft.setText(variable.triesLeftToString);
+        txtLetterTried.setText(variable.getLettersTried);
 
-        Toast.makeText(PlayTheGame.this, "Data loaded and updated", Toast.LENGTH_SHORT).show();
         super.onRestoreInstanceState(savedInstanceState);
     }
+
+    /*
+     * om mitt program inte skulle ändra mina sparade värden skulle jag välja
+     * att använda koden nedan istället för knappen
 
     protected void onStart() {
         super.onStart();
         loadDataAnsUpdate();
     }
+    */
 
     protected void onStop(){
         super.onStop();
         saveData();
     }
-
 }
-
-
-// This callback is called only when there is a saved instance that is previously saved by using
-// onSaveInstanceState(). We restore some state in onCreate(), while we can optionally restore
-// other state here, possibly usable after onStart() has completed.
-// The savedInstanceState Bundle is same as the one used in onCreate().
 
 
 
 /*
     -> antal försök kvar minskar om jag trycker på samma bokstav som är fel flera ggr
-    -> hur får jag txtwordtobeguessed att inte byta ord på sig? hur sparar jag ordet som är undangömt ?
-
-    -> Kod missas -> sänk inte på antalet försök men vet ej hur jag gör
-    / kan inte spara undan bilden
 */
 
 
